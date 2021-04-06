@@ -29,12 +29,24 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.LeftControl))
         {
             anim.SetBool("isAttack", true);
+            SoundManager.instance.AttackSound();
+
+            Collider2D col = Physics2D.OverlapCircle(transform.position, 2, (1 << LayerMask.NameToLayer("Enemy")));
+
+            if (col != null)
+            {
+                col.GetComponent<Enemy>().Die();
+            }
         }
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             anim.SetBool("isAttack", false);
         }
         isGround = Physics2D.OverlapCircle(groundChecker.position, groundRadius, groundLayer);
+    }
+
+    void FixedUpdate()
+    {
         Jump();
         Move();
     }
